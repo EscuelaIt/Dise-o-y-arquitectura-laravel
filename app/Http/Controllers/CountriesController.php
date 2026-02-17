@@ -13,9 +13,8 @@ class CountriesController extends Controller
         $result = $service->getCountries($request->input('continent'));
 
         if(! $result['success']) {
-            $error = $result['errors']['continent'] ?? $result['errors']['api'] ?? 'Error desconocido';
             return view('countries.index', [
-                'error' => $error,
+                'error' => $result['error'],
                 'countries' => [],
                 'total' => 0,
                 'continent' => $request->input('continent'),
@@ -29,4 +28,5 @@ class CountriesController extends Controller
             'message' => sprintf('Países encontrados: %d', count($result['data'])),
         ]);
     }
+}
 }

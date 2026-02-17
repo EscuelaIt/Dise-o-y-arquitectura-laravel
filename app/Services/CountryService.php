@@ -20,9 +20,7 @@ class CountryService
             $validList = implode(', ', array_map('ucwords', self::VALID_CONTINENTS));
             return [
                 'success' => false,
-                'errors' => [
-                    'continent' => 'Continente inválido. Opciones válidas: ' . $validList
-                ],
+                'error' => 'Continente inválido. Elementos válidos: ' . $validList,
             ];
         }
 
@@ -50,20 +48,19 @@ class CountryService
     {
         if ($response->failed()) {
             Log::error('Failed to fetch countries API', ['status' => $response->status()]);
-            return ['success' => false, 'errors' => ['api' => 'Error al obtener países']];
+            return ['success' => false, 'error' => 'Error al obtener países'];
         }
 
         $data = $response->json();
         if (!isset($data['data']) || !is_array($data['data'])) {
             Log::warning('Invalid API structure');
-            return ['success' => false, 'errors' => ['api' => 'Datos inválidos de API']];
+            return ['success' => false, 'error' => 'Datos inválidos de API'];
         }
 
         $countries = $data['data'];
-        $filteredCountries = $this->filterByContinent($countries, $continent);
         return [
             'success' => true,
-            'data' => $filteredCountries,
+            'data' => $this->filterByContinent($countries, $continent),
         ];
     }
 
@@ -74,6 +71,9 @@ class CountryService
         }
         return array_values(array_filter($countries, fn($country) =>
             strtolower($country['continent']) === $continent
+        ));
+    }
+}
         ));
     }
 }
