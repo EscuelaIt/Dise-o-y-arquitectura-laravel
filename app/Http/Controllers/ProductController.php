@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PriceCalculator;
+
 class ProductController extends Controller
 {
 
@@ -14,7 +16,7 @@ class ProductController extends Controller
                 'description' => 'Un ordenador portatil de alta gama preparado para trabajo en el hogar o en la oficina.',
                 'base_price' => 1200.00,
                 'tax_rate' => 0.21,
-                'discount_rate' => 0.15
+                'discount_rate' => 0.5
             ]
         ];
 
@@ -24,15 +26,15 @@ class ProductController extends Controller
 
         $product = $products[$id];
 
+        //$priceCalculator = new PriceCalculator($product['tax_rate'], $product['discount_rate']);
+        $priceCalculator = new PriceCalculator('en');
+        $priceCalculator->setTaxRate($product['tax_rate'])->setDiscountRate($product['discount_rate']);
+        $price = $priceCalculator->calculate($product['base_price']);
 
-        $priceWithDiscount = $product['base_price'] - ($product['base_price'] * $product['discount_rate']);
-        $priceWithTax = $priceWithDiscount + ($priceWithDiscount * $product['tax_rate']);
-        $finalPrice = round($priceWithTax, 2);
-
-        // Add calculated price to product
-        $product['final_price'] = $finalPrice;
-        $product['price_after_discount'] = round($priceWithDiscount, 2);
-        $product['tax_amount'] = round($priceWithTax - $priceWithDiscount, 2);
+        $product['final_price'] = $price['finalPrice'];
+        $product['price_after_discount'] = $price['priceWithDiscount'];
+        $product['tax_amount'] = $price['taxAmount'];
+        $product['formatted_base_price'] = $price['formatted_base_price'];
 
         return view('products.show')->with([
             'product' => $product,
