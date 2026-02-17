@@ -16,15 +16,15 @@
     <p>{{ $product['description'] }}</p>
 
     <div class="price">
-        Precio final: &euro;{{ $product['final_price'] }}
+        Precio final: &euro;{{ number_format($product['final_price'], 2, ',', '.') }}
     </div>
 
     <div class="breakdown">
         <h3>Desglose de precios:</h3>
         <ul>
-            <li>Precio base: &euro;{{ $product['formatted_base_price'] }}</li>
-            <li>Descuento ({{ $product['discount_rate'] * 100 }}%): &euro;{{ $product['price_after_discount'] }}</li>
-            <li>Impuesto ({{ $product['tax_rate'] * 100 }}%): &euro;{{ $product['tax_amount'] }}</li>
+            <li>Precio base: &euro;{{ number_format($product['base_price'], 2, ',', '.') }}</li>
+            <li>Descuento ({{ $product['discount_rate'] * 100 }}%): &euro;{{ number_format($product['price_after_discount'], 2, ',', '.') }}</li>
+            <li>Impuesto ({{ $product['tax_rate'] * 100 }}%): &euro;{{ number_format($product['tax_amount'], 2, ',', '.') }}</li>
         </ul>
     </div>
 
