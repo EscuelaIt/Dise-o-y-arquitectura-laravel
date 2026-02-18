@@ -10,6 +10,9 @@ class CountryService
     private const API_URL = 'https://timer.escuelait.com/api/countries';
     private const VALID_CONTINENTS = ['africa', 'north america', 'asia', 'europe', 'oceania', 'south america'];
 
+    public function __construct(private ServiceLogger $logger)
+    { }
+
     public function getCountries(?string $continent = null)
     {
         if ($continent) {
@@ -52,12 +55,16 @@ class CountryService
         }
 
         $data = $response->json();
+
         if (!isset($data['data']) || !is_array($data['data'])) {
             Log::warning('Invalid API structure');
             return ['success' => false, 'error' => 'Datos inválidos de API'];
         }
 
+
         $countries = $data['data'];
+        $this->logger->log(count($countries));
+
         return [
             'success' => true,
             'data' => $this->filterByContinent($countries, $continent),

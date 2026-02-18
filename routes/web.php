@@ -4,6 +4,7 @@ use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Services\CountryService;
+use App\Services\ServiceLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,7 @@ Route::get('/mi_ip', function(Request $request, CountryService $service) {
 });
 
 Route::get('/buy', [OrderController::class, 'order']);
+
+Route::get('/log', function (ServiceLogger $service) {
+    return $service->log("un mensaje...");
+});
