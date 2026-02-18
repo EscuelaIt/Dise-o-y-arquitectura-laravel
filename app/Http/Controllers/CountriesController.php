@@ -29,4 +29,3 @@ class CountriesController extends Controller
         ]);
     }
 }
-}
