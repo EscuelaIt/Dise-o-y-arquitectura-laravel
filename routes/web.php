@@ -25,4 +25,5 @@ Route::get('/buy', [OrderController::class, 'order']);
 
 Route::get('/log', function (ServiceLogger $service) {
     return $service->log("un mensaje...");
+
 });

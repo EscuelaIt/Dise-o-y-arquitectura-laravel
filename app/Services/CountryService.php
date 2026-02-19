@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Contracts\AppReportService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -10,7 +11,7 @@ class CountryService
     private const API_URL = 'https://timer.escuelait.com/api/countries';
     private const VALID_CONTINENTS = ['africa', 'north america', 'asia', 'europe', 'oceania', 'south america'];
 
-    public function __construct(private ServiceLogger $logger)
+    public function __construct(private ServiceLogger $logger, private AppReportService $reporter)
     { }
 
     public function getCountries(?string $continent = null)
@@ -64,6 +65,8 @@ class CountryService
 
         $countries = $data['data'];
         $this->logger->log(count($countries));
+
+        $this->reporter->generate($countries);
 
         return [
             'success' => true,
