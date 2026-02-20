@@ -14,14 +14,14 @@ Route::get('/', function () {
 
 Route::get('/countries', [CountriesController::class, 'index'])->name('countries.index');
 
-Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show')->middleware(['logrequest']);
 
 Route::get('/mi_ip', function(Request $request, CountryService $service) {
     $result = $service->getCountries();
     return $result['data'][1]['name'] . ' Tu IP es: ' . $request->ip();
 });
 
-Route::get('/buy', [OrderController::class, 'order']);
+Route::get('/buy', [OrderController::class, 'order'])->middleware(['logrequest']);
 
 Route::get('/log', function (ServiceLogger $service) {
     return $service->log("un mensaje...");
