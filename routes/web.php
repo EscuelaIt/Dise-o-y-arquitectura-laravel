@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CountriesController;
+use App\Http\Controllers\GenerateCertificateController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Services\CountryService;
@@ -27,3 +28,5 @@ Route::get('/log', function (ServiceLogger $service) {
     return $service->log("un mensaje...");
 
 });
+
+Route::get('/generate-cert', [GenerateCertificateController::class, 'generate']);

@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
             \App\Services\LogReportService::class
         );
 
+        $this->app->bind(
+            \App\Contracts\CertificateCreator::class,
+            \App\Services\PDFCertificateCreator::class
+        );
+
         $this->app
             ->when(OrderController::class)
             ->needs(AppReportService::class)
