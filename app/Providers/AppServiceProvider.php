@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Contracts\AppReportService;
 use App\Http\Controllers\OrderController;
 use App\Services\EmailReportService;
+use App\Services\OpenAIApiClient;
 use App\Services\SlugGenerator;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bindIf(SlugGenerator::class, function() {
             return new SlugGenerator(8);
+        });
+
+        $this->app->scoped(OpenAIApiClient::class, function() {
+            return new OpenAIApiClient(config('services.openai_api.key'));
         });
     }
 
