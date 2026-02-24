@@ -4,6 +4,7 @@ use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\GenerateCertificateController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Tag\TagController;
 use App\Services\CountryService;
 use App\Services\ServiceLogger;
 use Illuminate\Http\Request;
@@ -30,3 +31,6 @@ Route::get('/log', function (ServiceLogger $service) {
 });
 
 Route::get('/generate-cert', [GenerateCertificateController::class, 'generate']);
+
+Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
+Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
