@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Contracts\AppReportService;
 use App\Http\Controllers\OrderController;
 use App\Services\EmailReportService;
+use App\Services\SlugGenerator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +29,14 @@ class AppServiceProvider extends ServiceProvider
             ->when(OrderController::class)
             ->needs(AppReportService::class)
             ->give(EmailReportService::class);
+
+        $this->app->bind(SlugGenerator::class, function() {
+            return new SlugGenerator(4);
+        });
+
+        $this->app->bindIf(SlugGenerator::class, function() {
+            return new SlugGenerator(8);
+        });
     }
 
     /**

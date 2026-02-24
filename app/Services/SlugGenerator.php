@@ -6,7 +6,11 @@ use Illuminate\Support\Str;
 
 class SlugGenerator
 {
-    private int $randomStringLength = 3;
+    private int $randomStringLength;
+
+    public function __construct(int $randomStringLength) {
+        $this->randomStringLength = $randomStringLength;
+    }
 
     public function setRandomStringLength(int $length): self {
         $this->randomStringLength = $length;
