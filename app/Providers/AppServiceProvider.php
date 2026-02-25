@@ -4,10 +4,14 @@ namespace App\Providers;
 
 use App\Contracts\AppReportService;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\Tag\TagController;
+use App\Models\Tag;
+use App\Observers\TagObserver;
 use App\Services\EmailReportService;
 use App\Services\OpenAIApiClient;
 use App\Services\SlugGenerator;
+use App\View\Composers\WelcomeComposer;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,7 +45,9 @@ class AppServiceProvider extends ServiceProvider
        });
 
        $this->app->scoped(OpenAIApiClient::class, function() {
-           return new OpenAIApiClient(config('services.openai_api.key'));
+           $client = new OpenAIApiClient(config('services.openai_api.key'));
+           $client->configure('una configuración fina');
+           return $client;
        });
     }
 
@@ -50,7 +56,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $openAPIClient = $this->app->make(OpenAIApiClient::class);
-        $openAPIClient->configure('una configuración fina');
+       Tag::observe(TagObserver::class);
+       View::composer('welcome', WelcomeComposer::class);
+       Blade::if('name', function (string $value) {
+            return 'EscuelaIT' === $value;
+        });
     }
 }
