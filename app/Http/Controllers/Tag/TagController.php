@@ -7,15 +7,17 @@ use App\Models\Tag;
 use App\Services\CountryService;
 use App\Services\LogReportService;
 use App\Services\SlugGenerator;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
 class TagController extends Controller
 {
-    public function create()
+    public function create(Container $container)
     {
         $reporter = resolve(LogReportService::class);
-        $countryService = App::make(CountryService::class);
+        //$countryService = App::make(CountryService::class);
+        $countryService = $container->make(CountryService::class);
         $reporter->generate($countryService->getCountries());
 
         return view('tags.create');
