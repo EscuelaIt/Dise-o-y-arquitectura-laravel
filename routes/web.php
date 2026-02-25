@@ -6,8 +6,10 @@ use App\Http\Controllers\OpenAIController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Tag\TagController;
+use App\Models\Tag;
 use App\Services\CountryService;
 use App\Services\ServiceLogger;
+use App\Services\SlugGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
