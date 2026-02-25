@@ -10,6 +10,8 @@ use App\Models\Tag;
 use App\Services\CountryService;
 use App\Services\ServiceLogger;
 use App\Services\SlugGenerator;
+use Illuminate\Container\Attributes\Config;
+use Illuminate\Container\Attributes\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -46,4 +48,9 @@ Route::get('create-slug', function() {
         'randomStringLength' => 6,
     ]);
     return $slugGenerator->generateSlug('test', Tag::class, 'slug');
+});
+
+Route::get('app-name', function(#[Config('app.name')] $appName, #[Log('payment')] $logger) {
+    $logger->info('Hola Contextual Attributes');
+    return $appName;
 });
