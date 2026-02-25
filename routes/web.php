@@ -11,6 +11,7 @@ use App\Services\CountryService;
 use App\Services\ServiceLogger;
 use App\Services\SlugGenerator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -39,3 +40,10 @@ Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create'
 Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
 
 Route::get('/openai/send-message', [OpenAIController::class, 'sendMessage'])->name('openai.send-message');
+
+Route::get('create-slug', function() {
+    $slugGenerator = App::makeWith(SlugGenerator::class, [
+        'randomStringLength' => 6,
+    ]);
+    return $slugGenerator->generateSlug('test', Tag::class, 'slug');
+});
