@@ -25,4 +25,8 @@ class OpenAIApiClient
     {
         return $this->apiKey;
     }
+
+    public function configure($dato) {
+        Log::info('voy a configurar con ' . $dato);
+    }
 }
