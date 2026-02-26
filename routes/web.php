@@ -5,6 +5,7 @@ use App\Http\Controllers\GenerateCertificateController;
 use App\Http\Controllers\OpenAIController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Subscription\SubscriptionController;
 use App\Http\Controllers\Tag\TagController;
 use App\Models\Tag;
 use App\Services\CountryService;
@@ -42,6 +43,9 @@ Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create'
 Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
 
 Route::get('/openai/send-message', [OpenAIController::class, 'sendMessage'])->name('openai.send-message');
+
+Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+Route::post('/subscription/{plan}', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
 
 Route::get('create-slug', function() {
     $slugGenerator = App::makeWith(SlugGenerator::class, [
