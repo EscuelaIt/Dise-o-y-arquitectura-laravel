@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Subscription;
 
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
+use App\Models\User;
 use App\Services\PaymentGateway;
-use Illuminate\Http\Request;
+use Illuminate\Container\Attributes\CurrentUser;
 
 class SubscriptionController extends Controller
 {
@@ -16,10 +17,8 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    public function subscribe(Request $request, Plan $plan)
+    public function subscribe(#[CurrentUser()] ?User $user, Plan $plan, PaymentGateway $paymentService)
     {
-        $user = $request->user();
-        $paymentService = new PaymentGateway();
         $paymentService->processSubscription($user, $plan->id);
         return redirect('/')->with('success', 'Suscripción a ' . $plan->name . ' activada!');
     }
