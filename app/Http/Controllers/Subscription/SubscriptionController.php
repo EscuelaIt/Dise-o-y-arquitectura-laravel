@@ -19,7 +19,12 @@ class SubscriptionController extends Controller
 
     public function subscribe(#[CurrentUser()] ?User $user, Plan $plan, PaymentGateway $paymentService)
     {
-        $paymentService->processSubscription($user, $plan->id);
+        $response = $paymentService->processSubscription($user, $plan->id);
+
+        if (!$response->success) {
+            return redirect()->back()->with('error', $response->message);
+        }
+
         return redirect('/')->with('success', 'Suscripción a ' . $plan->name . ' activada!');
     }
 

@@ -2,14 +2,25 @@
 
 namespace App\Services;
 
+use App\Services\Responses\PaymentResponse;
+
 class PaymentGateway
 {
-    public function charge(int $amount): void
+    public function processSubscription($user, $planId): PaymentResponse
     {
-        info('Vamos a cobrar de manera REAL ' . $amount);
-    }
+        $success = rand(1, 100) > 50;
 
-    public function processSubscription($user, $plan) {
-        info("Vamos a cobrar una suscripción a $user con el plan $plan");
+        if ($success) {
+            return new PaymentResponse(
+                success: true,
+                message: 'Pago procesado exitosamente',
+                transactionId: 'txn_' . uniqid()
+            );
+        }
+
+        return new PaymentResponse(
+            success: false,
+            message: 'Error en el procesamiento del pago. Intenta de nuevo.'
+        );
     }
 }
