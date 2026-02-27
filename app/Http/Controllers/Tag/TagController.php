@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Services\CountryService;
 use App\Services\LogReportService;
-use App\Services\SlugGenerator;
+use Facades\App\Services\SlugGenerator;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -23,13 +23,13 @@ class TagController extends Controller
         return view('tags.create');
     }
 
-    public function store(Request $request, SlugGenerator $slugGenerator)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'nombre' => 'required|string|max:50',
         ]);
 
-        $slug = $slugGenerator->generateSlug($validated['nombre'], Tag::class, 'slug');
+        $slug = SlugGenerator::generateSlug($validated['nombre'], Tag::class, 'slug');
         $validated['slug'] = $slug;
 
         Tag::create($validated);
