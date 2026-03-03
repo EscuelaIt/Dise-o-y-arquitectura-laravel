@@ -39,8 +39,12 @@ Route::get('/log', function (ServiceLogger $service) {
 
 Route::get('/generate-cert', [GenerateCertificateController::class, 'generate']);
 
-Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
-Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
+Route::prefix(('/tags'))->group(function() {
+    Route::get('/create', [TagController::class, 'create'])->name('tags.create');
+    Route::post('/', [TagController::class, 'store'])->name('tags.store');
+    Route::post('/{tag}', [TagController::class, 'update'])->name('tags.update');
+});
+
 
 Route::get('/openai/send-message', [OpenAIController::class, 'sendMessage'])->name('openai.send-message');
 

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Tag;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tag\StoreTagRequest;
+use App\Http\Requests\Tag\UpdateTagRequest;
 use App\Models\Tag;
 use App\Services\CountryService;
 use App\Services\LogReportService;
 use Facades\App\Services\SlugGenerator;
 use Illuminate\Container\Container;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
 class TagController extends Controller
@@ -23,12 +24,9 @@ class TagController extends Controller
         return view('tags.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreTagRequest $request)
     {
-        $validated = $request->validate([
-            'nombre' => 'required|string|max:50',
-        ]);
-
+        $validated = $request->validated();
         $slug = SlugGenerator::generateSlug($validated['nombre'], Tag::class, 'slug');
         $validated['slug'] = $slug;
 
@@ -39,4 +37,14 @@ class TagController extends Controller
 
         return redirect()->route('tags.create')->with('success', 'Tag creada exitosamente');
     }
+
+    public function update(UpdateTagRequest $request, Tag $tag)
+    {
+        $validated = $request->validated();
+
+        $tag->update($validated);
+
+        return redirect("/")->with('success', 'Tag actualizada exitosamente');
+    }
+
 }
