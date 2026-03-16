@@ -1,5 +1,6 @@
 <?php
 
+use App\Facades\PriceCalculator;
 use App\Http\Controllers\CountriesController;
 use App\Http\Controllers\GenerateCertificateController;
 use App\Http\Controllers\OpenAIController;
@@ -61,4 +62,8 @@ Route::get('create-slug', function() {
 Route::get('app-name', function(#[Config('app.name')] $appName, #[Log('payment')] $logger) {
     $logger->info('Hola Contextual Attributes');
     return $appName;
+});
+
+Route::get('use-facade', function() {
+    return PriceCalculator::setTaxRate(0.10)->setDiscountRate(0.05)->calculate(1000);
 });

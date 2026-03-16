@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Observers\TagObserver;
 use App\Services\EmailReportService;
 use App\Services\OpenAIApiClient;
+use App\Services\PriceCalculator;
 use App\Services\SlugGenerator;
 use App\View\Composers\WelcomeComposer;
 use Illuminate\Support\Facades\Blade;
@@ -48,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
            $client = new OpenAIApiClient(config('services.openai_api.key'));
            $client->configure('una configuración fina');
            return $client;
+       });
+
+       $this->app->singleton('price-calculator', function() {
+           return new PriceCalculator();
        });
     }
 
